@@ -1,39 +1,44 @@
-# Agobo Motor Test
-# Moves: Forward, Reverse, turn Right, turn Left, Stop - then repeat
-# Press Ctrl-C to stop
-#
-# To check wiring is correct ensure the order of movement as above is correct
-# Run using: sudo python motorTest.py
+import agobo
+import sys
+import time
+import random
+import datetime
+import telepot
+import os
 
-
-import agobo, time
-
+"""
+A simple bot that accepts two commands:
+- /roll : reply with a random integer between 1 and 6, like rolling a dice.
+- /time : reply with the current time, like a clock.
+- /go
+INSERT TOKEN below in the code, and run:
+$ python diceyclock.py
+Ctrl-C to kill.
+"""
 speed = 80
-
 agobo.init()
-
-# main loop
-try:
-    while True:
+def handle(msg):
+    chat_id = msg['chat']['id']
+    command = msg['text']
+    print 'Got command: %s' % command
+    if command == '/rolldoris':
+        bot.sendMessage(chat_id, random.randint(1,6))
+    elif command == '/time':
+        bot.sendMessage(chat_id, str(datetime.datetime.now()))
+    elif command == '/go':
         agobo.forward(speed)
-        print 'Forward'
-        time.sleep(3)
-        agobo.reverse(speed)
-        print 'Reverse'
-        time.sleep(3)
-        agobo.spinRight(speed)
-        print 'Spin Right'
-        time.sleep(3)
-        agobo.spinLeft(speed)
-        print 'Spin Left'
-        time.sleep(3)
+        bot.sendMessage(chat_id, str('going forward'))
+    elif command == '/stop':
         agobo.stop()
-        print 'Stop'
-        time.sleep(3)
+        bot.sendMessage(chat_id, str('stopped'))
+    elif command == '/back':
+        agobo.reverse(speed)
+        bot.sendMessage(chat_id, str('going backward'))
+    elif command == '/play':
+        os.system("omxplayer example.mp3")
 
-except KeyboardInterrupt:
-    print
-
-finally:
-    agobo.cleanup()
-    
+bot = telepot.Bot('200791253:AAHtxaLnAmV9T8OI6Br8VcpxSwQPBhDZLpA')
+bot.message_loop(handle)
+print 'I am listening ...'
+while 1:
+    time.sleep(10)

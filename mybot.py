@@ -21,8 +21,9 @@ def handle(msg):
     chat_id = msg['chat']['id']
     command = msg['text']
     print 'Got command: %s' % command
-    if command == '/rolldoris':
-        bot.sendMessage(chat_id, random.randint(1,6))
+    if command == '/ota':
+        #do some ota jobs from repo, then restart
+        bot.sendMessage(chat_id, str('Upgrading myself,will back soon...'))
     elif command == '/time':
         bot.sendMessage(chat_id, str(datetime.datetime.now()))
     elif command == '/go':
@@ -36,6 +37,9 @@ def handle(msg):
         bot.sendMessage(chat_id, str('going backward'))
     elif command == '/play':
         os.system("omxplayer example.mp3")
+    elif command == "/reboot":
+        # do restart the whole machine
+        bot.sendMessage(chat_id, str('I don't want to risk myself, ah...see you soo..'))
 
 bot = telepot.Bot('200791253:AAHtxaLnAmV9T8OI6Br8VcpxSwQPBhDZLpA')
 bot.message_loop(handle)
